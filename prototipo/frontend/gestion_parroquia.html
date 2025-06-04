@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Parroquias</title>
+  <link rel="shortcut icon" href="../img/imagen.png" type="image/x-icon">
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    /* HEADER */
+    header {
+      height: 60px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    /* LAYOUT GENERAL */
+    .main-layout {
+      display: flex;
+      height: calc(100vh - 60px); /* Resta el alto del header */
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 60px;
+      background-color: #198754;
+      color: white;
+      transition: width 0.3s;
+      overflow-x: hidden;
+      display: flex;           /* <--- Agregado */
+      flex-direction: column;  /* <--- Agregado */
+    }
+
+    .sidebar:hover {
+      width: 250px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .sidebar i {
+      margin-right: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .sidebar span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar:hover span {
+      opacity: 1;
+    }
+
+    /* CONTENIDO */
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    form, table {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5daf78;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <img src="../img/imagen.png" alt="logo de abaco">
+    <h5 class="mb-0">Sistema de Inventario y Donaciones, <strong>DIOCESIS</strong></h5>
+    <div>
+      <i class="bi bi-person-circle"></i>
+      <span class="me-3"><strong>Karina</strong></span>
+      <i class="bi bi-bell-fill me-3"></i>
+    </div>
+  </header>
+
+  <!-- LAYOUT: SIDEBAR + CONTENT -->
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <a href="menu_central.html"><i class="bi bi-house-door-fill"></i><span>Inicio</span></a>
+      <a href="movimiento_inv.html"><i class="bi bi-box-seam"></i><span>Inventario</span></a>
+      <a href="donaciones.html"><i class="bi bi-heart-fill"></i><span>Donaciones</span></a>
+      <a href="permisos.html"><i class="bi bi-people-fill"></i><span>Voluntarios</span></a>
+      <a href="RGT_producto.html"><i class="bi bi-graph-up"></i><span>Reportes</span></a>
+    <div class="mt-auto">
+      <a href="configuracion.html"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+    </div>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="content">
+      <h1>Registrar Nueva Parroquia</h1>
+
+      <form id="formParroquia">
+        <input type="text" id="nombreParroquia" placeholder="Nombre de la parroquia" required>
+        <select id="tipo_organizacion" required>
+          <option value="">Tipo de organización</option>
+          <option value="permanente">Permanente</option>
+          <option value="esporadica">Esporádica</option>
+        </select>
+        <input type="text" id="nombrePadre" placeholder="Nombre del padre" required>
+        <select id="tipoDocumento" required>
+          <option value="">Tipo de documento</option>
+          <option value="CC">Cédula</option>
+          <option value="TI">Tarjeta de Identidad</option>
+        </select>
+        <input type="text" id="numeroDocumento" placeholder="Número de documento" required>
+        <input type="tel" id="telefono" placeholder="Número de teléfono" required>
+        <input type="text" id="direccion" placeholder="Dirección" required>
+        <input type="email" id="correo" placeholder="Correo electrónico" required>
+
+        <!--consumo de api-->
+        <div class="mb-3">
+          <label for="departamentos" class="form-label">Selecciona un departamento:</label>
+          <select class="form-select" id="departamentos" onchange="traer()">
+            <option selected disabled>Departamentos</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="municipios" class="form-label">Selecciona un municipio:</label>
+          <select class="form-select" id="municipios" disabled>
+            <option selected disabled>Municipios</option>
+          </select>
+        </div>
+        <!--fin api-->
+
+        <button type="submit">Guardar Parroquia</button>
+      </form>
+
+      <h2>Lista de Parroquias Registradas</h2>
+      <table id="tablaParroquias">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Organización</th>
+            <th>Padre</th>
+            <th>Teléfono</th>
+            <th>Ciudad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    const formParroquia = document.getElementById('formParroquia');
+    const tablaParroquias = document.getElementById('tablaParroquias').querySelector('tbody');
+    let idParroquia = 1;
+
+    formParroquia.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById('nombreParroquia').value;
+      const organizacion = document.getElementById('tipo_organizacion').value;
+      const padre = document.getElementById('nombrePadre').value;
+      const telefono = document.getElementById('telefono').value;
+      const municipioSelect = document.getElementById('municipios');
+      const municipio = municipioSelect.options[municipioSelect.selectedIndex].text;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+          <td>${String(idParroquia).padStart(3, '0')}</td>
+          <td>${nombre}</td>
+          <td>${organizacion}</td>
+          <td>${padre}</td>
+          <td>${telefono}</td>
+          <td>${municipio}</td>
+          <td><button onclick="editarParroquia(this)">Editar</button> <button onclick="eliminarParroquia(this)">Eliminar</button></td>
+      `;
+
+      tablaParroquias.appendChild(row);
+      formParroquia.reset();
+      idParroquia++;
+    });
+
+    function eliminarParroquia(btn) {
+      const row = btn.parentElement.parentElement;
+      row.remove();
+    }
+
+    function editarParroquia(btn) {
+      const row = btn.parentElement.parentElement;
+      const cells = row.querySelectorAll('td');
+      document.getElementById('nombreParroquia').value = cells[1].textContent;
+      document.getElementById('tipo_organizacion').value = cells[2].textContent;
+      document.getElementById('nombrePadre').value = cells[3].textContent;
+      document.getElementById('telefono').value = cells[4].textContent;
+      eliminarParroquia(btn);
+    }
+
+    const selectDeptos = document.getElementById('departamentos');
+    const selectMunicipios = document.getElementById('municipios');
+
+    window.onload = () => {
+      fetch('https://api-colombia.com/api/v1/Department')
+        .then(res => res.json())
+        .then(data => {
+          data.forEach(depto => {
+            const option = document.createElement('option');
+            option.value = depto.id;
+            option.textContent = depto.name;
+            selectDeptos.appendChild(option);
+          });
+        })
+        .catch(err => {
+          console.error('Error cargando departamentos:', err);
+        });
+    };
+
+    function traer() {
+      const id = selectDeptos.value;
+      selectMunicipios.innerHTML = '<option selected disabled>Cargando...</option>';
+      selectMunicipios.disabled = true;
+
+      fetch(`https://api-colombia.com/api/v1/Department/${id}/cities`)
+        .then(res => res.json())
+        .then(data => {
+          selectMunicipios.innerHTML = '';
+          if (data.length === 0) {
+            selectMunicipios.innerHTML = '<option disabled>No hay municipios</option>';
+            return;
+          }
+          selectMunicipios.disabled = false;
+          const defaultOption = document.createElement('option');
+          defaultOption.text = 'Seleccione un municipio';
+          defaultOption.disabled = true;
+          defaultOption.selected = true;
+          selectMunicipios.appendChild(defaultOption);
+
+          data.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city.id;
+            option.textContent = city.name;
+            selectMunicipios.appendChild(option);
+          });
+        })
+        .catch(err => {
+          console.error('Error cargando municipios:', err);
+          selectMunicipios.innerHTML = '<option disabled>Error al cargar</option>';
+        });
+    }
+  </script>
+</body>
+</html>

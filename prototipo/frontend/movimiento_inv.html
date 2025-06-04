@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Movimiento de Inventario</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="../img/imagen.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    header {
+      height: 60px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .main-layout {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 60px;
+      background-color: #198754;
+      color: white;
+      transition: width 0.3s;
+      overflow-x: hidden;
+      display: flex;           /* <--- Agregado */
+      flex-direction: column;  /* <--- Agregado */
+    }
+
+    .sidebar:hover {
+      width: 250px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .sidebar i {
+      margin-right: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .sidebar span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar:hover span {
+      opacity: 1;
+    }
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    form, table {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5daf78;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <img src="../img/imagen.png" alt="logo de abaco">
+    <h5 class="mb-0">Sistema de Inventario y Donaciones, <strong>DIOCESIS</strong></h5>
+    <div>
+      <i class="bi bi-person-circle"></i>
+      <span class="me-3"> <strong>Karina</strong> </span>
+      <i class="bi bi-bell-fill me-3"></i>
+    </div>
+  </header>
+  
+  <!-- LAYOUT -->
+  <div class="main-layout">
+    <div class="sidebar">
+      <a href="menu_central.html"><i class="bi bi-house-door-fill"></i><span>Inicio</span></a>
+      <a href="#"><i class="bi bi-box-seam"></i><span>Inventario</span></a>
+      <a href="#"><i class="bi bi-heart-fill"></i><span>Donaciones</span></a>
+      <a href="#"><i class="bi bi-people-fill"></i><span>Voluntarios</span></a>
+      <a href="#"><i class="bi bi-graph-up"></i><span>Reportes</span></a>
+      <a href="configuracion.html" class="mt-auto"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+    </div>
+
+    <div class="content">
+      <h1>Movimiento de Inventario</h1>
+
+      <form id="formMovimiento">
+        <input type="text" id="producto" placeholder="Nombre del producto" required />
+        <input type="number" id="cantidad" placeholder="Cantidad" min="1" required />
+        <select id="tipoMovimiento" required>
+          <option value="">Tipo de movimiento</option>
+          <option value="entrada">Entrada</option>
+          <option value="salida">Salida</option>
+        </select>
+        <input type="date" id="fechaMovimiento" required />
+        <select id="bodega" required>
+          <option value="">Selecciona la bodega</option>
+        </select>
+        <input type="text" id="responsable" placeholder="Responsable" required />
+        <button type="submit">Registrar Movimiento</button>
+      </form>
+
+      <h2>Lista de Movimientos</h2>
+      <table id="tablaMovimientos">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Bodega</th>
+            <th>Responsable</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    const formMovimiento = document.getElementById('formMovimiento');
+    const tablaMovimientos = document.getElementById('tablaMovimientos').querySelector('tbody');
+    const selectBodega = document.getElementById('bodega');
+    let idMovimiento = 1;
+    let editandoMovimiento = null;
+
+    const bodegas = [
+      { id: 1, nombre: 'Bodega Central' },
+      { id: 2, nombre: 'Bodega Norte' },
+      { id: 3, nombre: 'Bodega Sur' }
+    ];
+
+    function cargarBodegas() {
+      bodegas.forEach(bodega => {
+        const option = document.createElement('option');
+        option.value = bodega.nombre;
+        option.textContent = bodega.nombre;
+        selectBodega.appendChild(option);
+      });
+    }
+
+    cargarBodegas();
+    document.getElementById('fechaMovimiento').valueAsDate = new Date();
+
+    formMovimiento.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const producto = document.getElementById('producto').value.trim();
+      const cantidad = Number(document.getElementById('cantidad').value);
+      const tipo = document.getElementById('tipoMovimiento').value;
+      const fecha = document.getElementById('fechaMovimiento').value;
+      const bodega = document.getElementById('bodega').value;
+      const responsable = document.getElementById('responsable').value.trim();
+
+      if (!producto || cantidad <= 0 || !tipo || !fecha || !bodega || !responsable) {
+        alert('Por favor completa todos los campos correctamente.');
+        return;
+      }
+
+      if (editandoMovimiento) {
+        const cells = editandoMovimiento.querySelectorAll('td');
+        cells[1].textContent = producto;
+        cells[2].textContent = cantidad;
+        cells[3].textContent = tipo;
+        cells[4].textContent = fecha;
+        cells[5].textContent = bodega;
+        cells[6].textContent = responsable;
+        editandoMovimiento = null;
+      } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${String(idMovimiento).padStart(3, '0')}</td>
+          <td>${producto}</td>
+          <td>${cantidad}</td>
+          <td>${tipo}</td>
+          <td>${fecha}</td>
+          <td>${bodega}</td>
+          <td>${responsable}</td>
+          <td>
+            <button onclick="editarMovimiento(this)">Editar</button>
+            <button onclick="eliminarMovimiento(this)">Eliminar</button>
+          </td>
+        `;
+        tablaMovimientos.appendChild(row);
+        idMovimiento++;
+      }
+
+      formMovimiento.reset();
+      document.getElementById('fechaMovimiento').valueAsDate = new Date();
+    });
+
+    function eliminarMovimiento(btn) {
+      const row = btn.closest('tr');
+      if (editandoMovimiento === row) editandoMovimiento = null;
+      row.remove();
+    }
+
+    function editarMovimiento(btn) {
+      const row = btn.closest('tr');
+      const cells = row.querySelectorAll('td');
+
+      document.getElementById('producto').value = cells[1].textContent;
+      document.getElementById('cantidad').value = cells[2].textContent;
+      document.getElementById('tipoMovimiento').value = cells[3].textContent;
+      document.getElementById('fechaMovimiento').value = cells[4].textContent;
+      document.getElementById('bodega').value = cells[5].textContent;
+      document.getElementById('responsable').value = cells[6].textContent;
+
+      editandoMovimiento = row;
+    }
+  </script>
+
+</body>
+</html>

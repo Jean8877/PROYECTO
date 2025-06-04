@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Permisos del Asistente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .permiso-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin: 10px 0;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #5daf78;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Permisos para el Asistente</h1>
+
+  <div class="permiso-box">
+    <h3>Selecciona los módulos que el asistente puede usar:</h3>
+    <label><input type="checkbox" id="perm_categoria"> Categorías</label>
+    <label><input type="checkbox" id="perm_subcategoria"> Subcategorías</label>
+    <label><input type="checkbox" id="perm_producto"> Productos</label>
+    <label><input type="checkbox" id="perm_donante"> Donantes</label>
+    <label><input type="checkbox" id="perm_movimiento"> Movimientos de Inventario</label>
+    <label><input type="checkbox" id="perm_bodega"> Bodegas</label>
+    <label><input type="checkbox" id="perm_acta"> Acta de Vencimiento</label>
+    <label><input type="checkbox" id="perm_donacion"> Gestión de Donaciones</label>
+    <label><input type="checkbox" id="perm_reporte"> Reportes y Estadísticas</label>
+
+    <button onclick="guardarPermisos()">Guardar Permisos</button>
+  </div>
+
+  <script>
+    function guardarPermisos() {
+      const permisos = {
+        categoria: document.getElementById('perm_categoria').checked,
+        subcategoria: document.getElementById('perm_subcategoria').checked,
+        producto: document.getElementById('perm_producto').checked,
+        donante: document.getElementById('perm_donante').checked,
+        movimiento: document.getElementById('perm_movimiento').checked,
+        bodega: document.getElementById('perm_bodega').checked,
+        acta: document.getElementById('perm_acta').checked,
+        donacion: document.getElementById('perm_donacion').checked,
+        reporte: document.getElementById('perm_reporte').checked
+      };
+
+      localStorage.setItem("permisosAsistente", JSON.stringify(permisos));
+      alert("✅ Permisos guardados correctamente.");
+    }
+
+    // Cargar permisos previos si existen
+    window.onload = function() {
+      const permisos = JSON.parse(localStorage.getItem("permisosAsistente"));
+      if (permisos) {
+        for (let clave in permisos) {
+          const checkbox = document.getElementById("perm_" + clave);
+          if (checkbox) checkbox.checked = permisos[clave];
+        }
+      }
+    };
+  </script>
+
+</body>
+</html>

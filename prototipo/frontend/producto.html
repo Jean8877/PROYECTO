@@ -1,0 +1,333 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Productos</title>
+  <link rel="shortcut icon" href="../img/imagen.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    header {
+      height: 60px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .main-layout {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 60px;
+      background-color: #198754;
+      color: white;
+      transition: width 0.3s;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar:hover {
+      width: 250px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .sidebar i {
+      margin-right: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .sidebar span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar:hover span {
+      opacity: 1;
+    }
+
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    form, table {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5daf78;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <img src="../img/imagen.png" alt="logo de abaco">
+    <h5 class="mb-0">Sistema de Inventario y Donaciones, <strong>DIOCESIS</strong></h5>
+    <div>
+      <i class="bi bi-person-circle"></i>
+      <span class="me-3"> <strong>Karina</strong> </span>
+      <i class="bi bi-bell-fill me-3"></i>
+    </div>
+  </header>
+
+  <!-- LAYOUT: SIDEBAR + CONTENT -->
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <a href="menu_central.html"><i class="bi bi-house-door-fill"></i><span>Inicio</span></a>
+      <a href="movimiento_inv.html"><i class="bi bi-box-seam"></i><span>Inventario</span></a>
+      <a href="donaciones.html"><i class="bi bi-heart-fill"></i><span>Donaciones</span></a>
+      <a href="permisos.html"><i class="bi bi-people-fill"></i><span>Voluntarios</span></a>
+      <a href="RGT_producto.html"><i class="bi bi-graph-up"></i><span>Reportes</span></a>
+      <a href="#" class="mt-auto"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="content">
+      <h1>Registrar Nuevo Producto</h1>
+
+      <form id="formProducto">
+        <select id="categoriaSelect" required>
+          <option value="">Selecciona una categoría</option>
+        </select>
+        <select id="subcategoriaSelect" required disabled>
+          <option value="">Selecciona una subcategoría</option>
+        </select>
+        <input type="text" id="nombreProducto" placeholder="Nombre del producto" required />
+        <input type="text" id="descripcionProducto" placeholder="Descripción del producto" />
+        <input type="number" id="precioProducto" placeholder="Precio" min="0" step="0.01" required />
+        <input type="number" id="cantidadProducto" placeholder="Cantidad" min="0" required />
+        <button type="submit">Guardar Producto</button>
+      </form>
+
+      <h2>Lista de Productos</h2>
+      <table id="tablaProductos">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Categoría</th>
+            <th>Subcategoría</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const categorias = [
+      { id: 1, nombre: "Alimentos" },
+      { id: 2, nombre: "Limpieza" },
+      { id: 3, nombre: "Tecnología" }
+    ];
+
+    const subcategorias = [
+      { id: 1, categoriaId: 1, nombre: "Frutas" },
+      { id: 2, categoriaId: 1, nombre: "Verduras" },
+      { id: 3, categoriaId: 2, nombre: "Detergentes" },
+      { id: 4, categoriaId: 3, nombre: "Computadoras" },
+      { id: 5, categoriaId: 3, nombre: "Celulares" }
+    ];
+
+    const categoriaSelect = document.getElementById('categoriaSelect');
+    const subcategoriaSelect = document.getElementById('subcategoriaSelect');
+    const formProducto = document.getElementById('formProducto');
+    const tablaProductos = document.getElementById('tablaProductos').querySelector('tbody');
+
+    let idProducto = 1;
+    let editandoProducto = null;
+
+    function cargarCategorias() {
+      categorias.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.nombre;
+        categoriaSelect.appendChild(option);
+      });
+    }
+
+    function cargarSubcategorias(categoriaId) {
+      subcategoriaSelect.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+      if (!categoriaId) {
+        subcategoriaSelect.disabled = true;
+        return;
+      }
+      const filtradas = subcategorias.filter(sub => sub.categoriaId == categoriaId);
+      filtradas.forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub.id;
+        option.textContent = sub.nombre;
+        subcategoriaSelect.appendChild(option);
+      });
+      subcategoriaSelect.disabled = false;
+    }
+
+    categoriaSelect.addEventListener('change', function() {
+      cargarSubcategorias(this.value);
+    });
+
+    cargarCategorias();
+
+    formProducto.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const categoriaId = categoriaSelect.value;
+      const subcategoriaId = subcategoriaSelect.value;
+      const nombre = document.getElementById('nombreProducto').value.trim();
+      const descripcion = document.getElementById('descripcionProducto').value.trim();
+      const precio = parseFloat(document.getElementById('precioProducto').value);
+      const cantidad = parseInt(document.getElementById('cantidadProducto').value);
+
+      if (!categoriaId || !subcategoriaId || !nombre || isNaN(precio) || isNaN(cantidad)) return;
+
+      const categoriaNombre = categorias.find(c => c.id == categoriaId)?.nombre || '';
+      const subcategoriaNombre = subcategorias.find(s => s.id == subcategoriaId)?.nombre || '';
+
+      if (editandoProducto) {
+        editandoProducto.querySelector('.col-nombre').textContent = nombre;
+        editandoProducto.querySelector('.col-descripcion').textContent = descripcion;
+        editandoProducto.querySelector('.col-precio').textContent = precio.toFixed(2);
+        editandoProducto.querySelector('.col-cantidad').textContent = cantidad;
+        editandoProducto.querySelector('.col-categoria').textContent = categoriaNombre;
+        editandoProducto.querySelector('.col-subcategoria').textContent = subcategoriaNombre;
+        editandoProducto = null;
+      } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="col-id">${String(idProducto).padStart(3, '0')}</td>
+          <td class="col-nombre">${nombre}</td>
+          <td class="col-descripcion">${descripcion}</td>
+          <td class="col-precio">${precio.toFixed(2)}</td>
+          <td class="col-cantidad">${cantidad}</td>
+          <td class="col-categoria">${categoriaNombre}</td>
+          <td class="col-subcategoria">${subcategoriaNombre}</td>
+          <td>
+            <button onclick="editarProducto(this)">Editar</button>
+            <button onclick="eliminarProducto(this)">Eliminar</button>
+          </td>
+        `;
+        tablaProductos.appendChild(row);
+        idProducto++;
+      }
+
+      formProducto.reset();
+      subcategoriaSelect.disabled = true;
+    });
+
+    function eliminarProducto(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+    }
+
+    function editarProducto(btn) {
+      const row = btn.closest('tr');
+      document.getElementById('nombreProducto').value = row.querySelector('.col-nombre').textContent;
+      document.getElementById('descripcionProducto').value = row.querySelector('.col-descripcion').textContent;
+      document.getElementById('precioProducto').value = row.querySelector('.col-precio').textContent;
+      document.getElementById('cantidadProducto').value = row.querySelector('.col-cantidad').textContent;
+
+      const catNombre = row.querySelector('.col-categoria').textContent;
+      const subcatNombre = row.querySelector('.col-subcategoria').textContent;
+
+      const categoria = categorias.find(c => c.nombre === catNombre);
+      const subcategoria = subcategorias.find(s => s.nombre === subcatNombre && s.categoriaId === categoria?.id);
+
+      if (categoria) {
+        categoriaSelect.value = categoria.id;
+        cargarSubcategorias(categoria.id);
+      } else {
+        categoriaSelect.value = '';
+        subcategoriaSelect.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+        subcategoriaSelect.disabled = true;
+      }
+
+      if (subcategoria) {
+        subcategoriaSelect.value = subcategoria.id;
+      } else {
+        subcategoriaSelect.value = '';
+      }
+
+      editandoProducto = row;
+    }
+  </script>
+</body>
+</html>

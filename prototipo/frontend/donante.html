@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Donantes</title>
+  <link rel="shortcut icon" href="../img/imagen.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      height: 60px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .main-layout {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 60px;
+      background-color: #198754;
+      color: white;
+      transition: width 0.3s;
+      overflow-x: hidden;
+      display: flex;           /* <--- Agregado */
+      flex-direction: column;  /* <--- Agregado */
+    }
+
+    .sidebar:hover {
+      width: 250px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+
+    .sidebar i {
+      margin-right: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .sidebar span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar:hover span {
+      opacity: 1;
+    }
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    form, table {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5daf78;
+    }
+
+   
+    
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <img src="../img/imagen.png" alt="logo de abaco">
+    <h5 class="mb-0">Sistema de Inventario y Donaciones, <strong>DIOCESIS</strong></h5>
+    <div>
+      <i class="bi bi-person-circle"></i>
+      <span class="me-3"> <strong>Karina</strong> </span>
+      <i class="bi bi-bell-fill me-3"></i>
+
+    </div>
+  </header>
+  
+  <!-- LAYOUT -->
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <a href="menu_central.html"><i class="bi bi-house-door-fill"></i><span>Inicio</span></a>
+      <a href="#"><i class="bi bi-box-seam"></i> <span>Inventario</span></a>
+      <a href="#"><i class="bi bi-heart-fill"></i> <span>Donaciones</span></a>
+      <a href="#"><i class="bi bi-people-fill"></i> <span>Voluntarios</span></a>
+      <a href="#"><i class="bi bi-graph-up"></i> <span>Reportes</span></a>
+      <a href="configuracion.html" class="mt-auto"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="content">
+      <h1>Registrar Nuevo Donante</h1>
+
+      <form id="formDonante">
+        <input type="text" id="nombreDonante" placeholder="Nombre completo" required />
+        <select id="tipoDocumento" required>
+          <option value="">Tipo de documento</option>
+          <option value="CC">Cédula</option>
+          <option value="TI">Tarjeta de Identidad</option>
+          <option value="CE">Cédula de Extranjería</option>
+          <option value="PA">Pasaporte</option>
+        </select>
+        <input type="text" id="numeroDocumento" placeholder="Número de documento" required />
+        <input type="tel" id="telefono" placeholder="Número de teléfono" required />
+        <input type="email" id="correo" placeholder="Correo electrónico" required />
+        <input type="text" id="direccion" placeholder="Dirección" required />
+        <button type="submit">Guardar Donante</button>
+      </form>
+
+      <h2>Lista de Donantes</h2>
+      <table id="tablaDonantes">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre completo</th>
+            <th>Tipo Documento</th>
+            <th>Número Documento</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const formDonante = document.getElementById('formDonante');
+    const tablaDonantes = document.getElementById('tablaDonantes').querySelector('tbody');
+    let idDonante = 1;
+    let editandoDonante = null;
+
+    formDonante.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById('nombreDonante').value.trim();
+      const tipoDoc = document.getElementById('tipoDocumento').value;
+      const numDoc = document.getElementById('numeroDocumento').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const correo = document.getElementById('correo').value.trim();
+      const direccion = document.getElementById('direccion').value.trim();
+
+      if (!nombre || !tipoDoc || !numDoc || !telefono || !correo || !direccion) return;
+
+      if (editandoDonante) {
+        editandoDonante.querySelector('.col-nombre').textContent = nombre;
+        editandoDonante.querySelector('.col-tipodoc').textContent = tipoDoc;
+        editandoDonante.querySelector('.col-numdoc').textContent = numDoc;
+        editandoDonante.querySelector('.col-telefono').textContent = telefono;
+        editandoDonante.querySelector('.col-correo').textContent = correo;
+        editandoDonante.querySelector('.col-direccion').textContent = direccion;
+
+        editandoDonante = null;
+      } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="col-id">${String(idDonante).padStart(3, '0')}</td>
+          <td class="col-nombre">${nombre}</td>
+          <td class="col-tipodoc">${tipoDoc}</td>
+          <td class="col-numdoc">${numDoc}</td>
+          <td class="col-telefono">${telefono}</td>
+          <td class="col-correo">${correo}</td>
+          <td class="col-direccion">${direccion}</td>
+          <td>
+            <button onclick="editarDonante(this)">Editar</button>
+            <button onclick="eliminarDonante(this)">Eliminar</button>
+          </td>
+        `;
+        tablaDonantes.appendChild(row);
+        idDonante++;
+      }
+
+      formDonante.reset();
+    });
+
+    function eliminarDonante(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+      if (editandoDonante === row) editandoDonante = null;
+    }
+
+    function editarDonante(btn) {
+      const row = btn.closest('tr');
+
+      document.getElementById('nombreDonante').value = row.querySelector('.col-nombre').textContent;
+      document.getElementById('tipoDocumento').value = row.querySelector('.col-tipodoc').textContent;
+      document.getElementById('numeroDocumento').value = row.querySelector('.col-numdoc').textContent;
+      document.getElementById('telefono').value = row.querySelector('.col-telefono').textContent;
+      document.getElementById('correo').value = row.querySelector('.col-correo').textContent;
+      document.getElementById('direccion').value = row.querySelector('.col-direccion').textContent;
+
+      editandoDonante = row;
+    }
+  </script>
+
+</body>
+</html>

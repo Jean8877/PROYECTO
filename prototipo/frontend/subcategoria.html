@@ -1,0 +1,263 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Subcategorías</title>
+  <link rel="shortcut icon" href="../img/imagen.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    /* HEADER */
+    header {
+      height: 60px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* LAYOUT GENERAL */
+    .main-layout {
+      display: flex;
+      height: calc(100vh - 60px); /* Resta el alto del header */
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 60px;
+      background-color: #198754;
+      color: white;
+      transition: width 0.3s;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar:hover {
+      width: 250px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .sidebar i {
+      margin-right: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .sidebar span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar:hover span {
+      opacity: 1;
+    }
+
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    /* CONTENIDO */
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+    }
+
+    /* ESTILOS FORMULARIO Y TABLA */
+    form, table {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5daf78;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <img src="../img/imagen.png" alt="logo de abaco">
+    <h5 class="mb-0">Sistema de Inventario y Donaciones, <strong>DIOCESIS</strong></h5>
+    <div>
+      <i class="bi bi-person-circle"></i>
+      <span class="me-3"><strong>Karina</strong></span>
+      <i class="bi bi-bell-fill me-3"></i>
+    </div>
+  </header>
+
+  <!-- LAYOUT: SIDEBAR + CONTENT -->
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <a href="menu_central.html"><i class="bi bi-house-door-fill"></i><span>Inicio</span></a>
+      <a href="movimiento_inv.html"><i class="bi bi-box-seam"></i><span>Inventario</span></a>
+      <a href="donaciones.html"><i class="bi bi-heart-fill"></i><span>Donaciones</span></a>
+      <a href="permisos.html"><i class="bi bi-people-fill"></i><span>Voluntarios</span></a>
+      <a href="RGT_producto.html"><i class="bi bi-graph-up"></i><span>Reportes</span></a>
+      <a href="#" class="mt-auto"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="content">
+      <h1>Registrar Nueva Subcategoría</h1>
+
+      <form id="formSubcategoria">
+        <select id="categoriaSelect" required>
+          <option value="">Selecciona una categoría</option>
+        </select>
+        <input type="text" id="nombreSubcategoria" placeholder="Nombre de la subcategoría" required>
+        <input type="text" id="descripcionSubcategoria" placeholder="Descripción de la subcategoría" required>
+        <button type="submit">Guardar Subcategoría</button>
+      </form>
+
+      <h2>Lista de Subcategorías</h2>
+      <table id="tablaSubcategorias">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    const categorias = [
+      { id: 1, nombre: "Alimentos" },
+      { id: 2, nombre: "Limpieza" },
+      { id: 3, nombre: "Tecnología" }
+    ];
+
+    const categoriaSelect = document.getElementById('categoriaSelect');
+    const formSubcategoria = document.getElementById('formSubcategoria');
+    const tablaSubcategorias = document.getElementById('tablaSubcategorias').querySelector('tbody');
+
+    let idSubcategoria = 1;
+    let editandoSubcategoria = null;
+
+    function cargarCategorias() {
+      categorias.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.nombre;
+        option.textContent = cat.nombre;
+        categoriaSelect.appendChild(option);
+      });
+    }
+
+    cargarCategorias();
+
+    formSubcategoria.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const categoria = categoriaSelect.value;
+      const nombre = document.getElementById('nombreSubcategoria').value.trim();
+      const descripcion = document.getElementById('descripcionSubcategoria').value.trim();
+
+      if (!categoria || !nombre || !descripcion) return;
+
+      if (editandoSubcategoria) {
+        editandoSubcategoria.querySelector('.col-categoria').textContent = categoria;
+        editandoSubcategoria.querySelector('.col-nombre').textContent = nombre;
+        editandoSubcategoria.querySelector('.col-descripcion').textContent = descripcion;
+        editandoSubcategoria = null;
+      } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="col-id">${String(idSubcategoria).padStart(3, '0')}</td>
+          <td class="col-nombre">${nombre}</td>
+          <td class="col-descripcion">${descripcion}</td>
+          <td class="col-categoria">${categoria}</td>
+          <td>
+            <button onclick="editarSubcategoria(this)">Editar</button>
+            <button onclick="eliminarSubcategoria(this)">Eliminar</button>
+          </td>
+        `;
+        tablaSubcategorias.appendChild(row);
+        idSubcategoria++;
+      }
+
+      formSubcategoria.reset();
+    });
+
+    function eliminarSubcategoria(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+    }
+
+    function editarSubcategoria(btn) {
+      const row = btn.closest('tr');
+      document.getElementById('nombreSubcategoria').value = row.querySelector('.col-nombre').textContent;
+      document.getElementById('descripcionSubcategoria').value = row.querySelector('.col-descripcion').textContent;
+      categoriaSelect.value = row.querySelector('.col-categoria').textContent;
+
+      editandoSubcategoria = row;
+    }
+  </script>
+</body>
+</html>

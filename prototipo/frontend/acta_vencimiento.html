@@ -1,0 +1,290 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Acta de Vencimiento - Sistema de Inventario</title>
+
+  <!-- Bootstrap CSS y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    /* --- PLANTILLA PRINCIPAL --- */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    /* HEADER */
+    header {
+      height: 60px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* LAYOUT GENERAL */
+    .main-layout {
+      display: flex;
+      height: calc(100vh - 60px); /* Resta el alto del header */
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 60px;
+      background-color: #198754;
+      color: white;
+      transition: width 0.3s;
+      overflow-x: hidden;
+      display: flex;           /* <--- Agregado */
+      flex-direction: column;  /* <--- Agregado */
+    }
+
+    .sidebar:hover {
+      width: 250px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .sidebar i {
+      margin-right: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .sidebar span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar:hover span {
+      opacity: 1;
+    }
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    /* CONTENIDO */
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+    }
+
+    /* --- ESTILOS DEL FORMULARIO Y TABLA --- */
+    form, table {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    input, textarea {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    button:hover {
+      background-color: #5daf78;
+    }
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+  <header>
+    <img src="../img/imagen.png" alt="logo de abaco">
+    <h5 class="mb-0">Sistema de Inventario y Donaciones, <strong>DIOCESIS</strong></h5>
+    <div>
+      <i class="bi bi-person-circle"></i>
+      <span class="me-3"> <strong>Karina</strong> </span>
+      <i class="bi bi-bell-fill me-3"></i>
+
+      
+    </div>
+  </header>
+  
+  <!-- LAYOUT: SIDEBAR + CONTENT -->
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <a href="menu_central.html"><i class="bi bi-house-door-fill"></i><span>inicio</span></a>
+      <a href="movimiento_inv.html"><i class="bi bi-box-seam"></i> <span>Inventario</span></a>
+      <a href="donaciones.html"><i class="bi bi-heart-fill"></i> <span>Donaciones</span></a>
+      <a href="#"><i class="bi bi-people-fill"></i> <span>Voluntarios</span></a>
+      <a href="#"><i class="bi bi-graph-up"></i> <span>Reportes</span></a>
+      <a href="configuracion.html" class="mt-auto"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="content">
+      <h1>Crear Acta de Vencimiento</h1>
+
+      <form id="formActa">
+        <label>Banco de Alimentos: <strong>DIOCESIS</strong></label><br><br>
+        <input type="date" id="fecha" required />
+        <input type="time" id="hora" required />
+        <textarea id="datosProducto" placeholder="Datos del Producto" required rows="3"></textarea>
+        <textarea id="observaciones" placeholder="Observaciones" rows="3"></textarea>
+        <textarea id="accionesTomadas" placeholder="Acciones Tomadas" rows="3"></textarea>
+        <input type="text" id="firmaConformidad" placeholder="Firma de Conformidad" required />
+        <input type="text" id="firmaCoordinador" placeholder="Firma del Coordinador" required />
+        <button type="submit">Guardar Acta</button>
+      </form>
+
+      <h2>Lista de Actas de Vencimiento</h2>
+      <table id="tablaActas">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Datos Producto</th>
+            <th>Observaciones</th>
+            <th>Acciones Tomadas</th>
+            <th>Firma Conformidad</th>
+            <th>Firma Coordinador</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const formActa = document.getElementById('formActa');
+    const tablaActas = document.getElementById('tablaActas').querySelector('tbody');
+    let idActa = 1;
+    let editandoActa = null;
+
+    formActa.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const fecha = document.getElementById('fecha').value;
+      const hora = document.getElementById('hora').value;
+      const datosProducto = document.getElementById('datosProducto').value.trim();
+      const observaciones = document.getElementById('observaciones').value.trim();
+      const accionesTomadas = document.getElementById('accionesTomadas').value.trim();
+      const firmaConformidad = document.getElementById('firmaConformidad').value.trim();
+      const firmaCoordinador = document.getElementById('firmaCoordinador').value.trim();
+
+      if (!fecha || !hora || !datosProducto || !firmaConformidad || !firmaCoordinador) {
+        alert('Por favor completa los campos obligatorios.');
+        return;
+      }
+
+      if (editandoActa) {
+        // Editar
+        editandoActa.querySelector('.col-fecha').textContent = fecha;
+        editandoActa.querySelector('.col-hora').textContent = hora;
+        editandoActa.querySelector('.col-datosProducto').textContent = datosProducto;
+        editandoActa.querySelector('.col-observaciones').textContent = observaciones;
+        editandoActa.querySelector('.col-accionesTomadas').textContent = accionesTomadas;
+        editandoActa.querySelector('.col-firmaConformidad').textContent = firmaConformidad;
+        editandoActa.querySelector('.col-firmaCoordinador').textContent = firmaCoordinador;
+
+        editandoActa = null;
+      } else {
+        // Crear nuevo
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${String(idActa).padStart(3,'0')}</td>
+          <td class="col-fecha">${fecha}</td>
+          <td class="col-hora">${hora}</td>
+          <td class="col-datosProducto">${datosProducto}</td>
+          <td class="col-observaciones">${observaciones}</td>
+          <td class="col-accionesTomadas">${accionesTomadas}</td>
+          <td class="col-firmaConformidad">${firmaConformidad}</td>
+          <td class="col-firmaCoordinador">${firmaCoordinador}</td>
+          <td>
+            <button type="button" onclick="editarActa(this)">Editar</button>
+            <button type="button" onclick="eliminarActa(this)">Eliminar</button>
+          </td>
+        `;
+        tablaActas.appendChild(row);
+        idActa++;
+      }
+
+      formActa.reset();
+    });
+
+    function eliminarActa(btn) {
+      const row = btn.closest('tr');
+      if (editandoActa === row) editandoActa = null;
+      row.remove();
+    }
+
+    function editarActa(btn) {
+      const row = btn.closest('tr');
+      document.getElementById('fecha').value = row.querySelector('.col-fecha').textContent;
+      document.getElementById('hora').value = row.querySelector('.col-hora').textContent;
+      document.getElementById('datosProducto').value = row.querySelector('.col-datosProducto').textContent;
+      document.getElementById('observaciones').value = row.querySelector('.col-observaciones').textContent;
+      document.getElementById('accionesTomadas').value = row.querySelector('.col-accionesTomadas').textContent;
+      document.getElementById('firmaConformidad').value = row.querySelector('.col-firmaConformidad').textContent;
+      document.getElementById('firmaCoordinador').value = row.querySelector('.col-firmaCoordinador').textContent;
+
+      editandoActa = row;
+    }
+  </script>
+
+</body>
+</html>
