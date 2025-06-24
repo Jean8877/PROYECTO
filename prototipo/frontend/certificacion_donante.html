@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Header + Sidebar</title>
+  <title>Certificado de Donación</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -25,6 +25,11 @@
       justify-content: space-between;
     }
 
+    header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
     /* LAYOUT GENERAL */
     .main-layout {
       display: flex;
@@ -38,8 +43,8 @@
       color: white;
       transition: width 0.3s;
       overflow-x: hidden;
-      display: flex;           /* <--- Agregado */
-      flex-direction: column;  /* <--- Agregado */
+      display: flex;
+      flex-direction: column;
     }
 
     .sidebar:hover {
@@ -74,24 +79,66 @@
       opacity: 1;
     }
 
-     header img {
-      height: 40px;
-      margin-right: 10px;
-    }
-
-
-
     /* CONTENIDO */
     .content {
       flex-grow: 1;
       padding: 20px;
       overflow-y: auto;
     }
+    .filtros{
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* CERTIFICADO */
+    .certificado {
+      border: 5px double #333;
+      padding: 40px;
+      background-color: #fff;
+      max-width: 800px;
+      margin: auto;
+      font-family: "Times New Roman", serif;
+    }
+
+    .titulo {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .cert-logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cert-logo img {
+      max-width: 100px;
+    }
+
+    .contenido {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .firma {
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .firma span {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-   <!-- HEADER -->
+  <!-- HEADER -->
   <header>
     <img src="../img/imagen.png" alt="logo de abaco">
     <h5 class="mb-0">Sistema de Inventario y Donaciones, <strong>DIOCESIS</strong></h5>
@@ -101,7 +148,8 @@
       <i class="bi bi-bell-fill me-3"></i>
     </div>
   </header>
-  <!-- LAYOUT: SIDEBAR + CONTENT -->
+
+  <!-- LAYOUT -->
   <div class="main-layout">
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -110,13 +158,59 @@
       <a href="donaciones.html"><i class="bi bi-heart-fill"></i> <span>Donaciones</span></a>
       <a href="permisos.html"><i class="bi bi-people-fill"></i> <span>Voluntarios</span></a>
       <a href="RGT_producto.html"><i class="bi bi-graph-up"></i> <span>Reportes</span></a>
-
-      <a href="#" class="mt-auto"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+      <a href="#"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
     </div>
 
     <!-- CONTENIDO -->
     <div class="content">
-      <h1>Bienvenido</h1>
+
+      <div class="filtros">
+          <h3>Generar Certificado de Donante</h3>
+
+          
+          <!-- FORMULARIO -->
+          <form id="form-certificado" class="mb-5">
+            <div class="mb-3">
+              <label class="form-label">Nombre del Donante</label>
+              <input type="text" class="form-control" id="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Cédula del Donante</label>
+              <input type="text" class="form-control" id="cedula" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Fecha de Donación</label>
+              <input type="date" class="form-control" id="fechaDonacion" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Productos Donados (uno por línea)</label>
+              <textarea class="form-control" id="productos" rows="4" placeholder="Ej: Arroz - 25kg" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Generar Certificado</button>
+          </form>
+        
+          <!-- CERTIFICADO -->
+          <div class="certificado d-none" id="vista-certificado">
+            <div class="logo text-center">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo_SENA.svg/2560px-Logo_SENA.svg.png" alt="Logo SENA" style="max-width: 100px;">
+            </div>
+            <div class="titulo">Certificado de Donación</div>
+            <div class="contenido">
+              <p>Se certifica que el(la) señor(a) <strong id="c-nombre"></strong>, identificado con cédula No. <strong id="c-cedula"></strong>, realizó una donación al Banco de Alimentos en la fecha: <strong id="c-fecha"></strong>.</p>
+              <p><strong>Detalle de la Donación:</strong></p>
+              <ul id="c-productos"></ul>
+              <p>Esta contribución fortalece nuestra labor solidaria y beneficia directamente a familias en condición de vulnerabilidad.</p>
+              <p>Valledupar, <span id="c-hoy"></span>.</p>
+            </div>
+            <div class="firma">
+              ____________________________<br>
+              <span>Coordinador Banco de Alimentos</span>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
     </div>
   </div>
 
