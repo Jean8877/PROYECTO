@@ -15,7 +15,7 @@ def conectar(vhost, vuser, vpass, vdb):
 
 # ruta consultar tipo_usuario generales
 
-@app.route("/consultar_tipo_usuario", methods=['GET'])
+@app.route("/consultar_tipo_usuario/<int:codigo>", methods=['GET'])
 def consultar_tipo_usuario(codigo):
     """
     consulta general por id
