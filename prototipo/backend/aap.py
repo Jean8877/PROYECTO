@@ -70,8 +70,34 @@ def consultar_tipo_usuario(codigo):
         print(ex)
         return jsonify({'mensaje':'Error en la consulta'}),
     
+@app.route("/tipo_donante", methods=['GET'])
+def donante():
+    """
+    consulta de tipo_donante
+    ---
+    responses:
+      200:
+        description: lista de registro
+    """
+    try:
+        conn= conectar('localhost','root','Es1084734914','proyecto')
+        cur= conn.cursor()
+        cur.execute("SELECT * FROM tipo_donante")
+        datos= cur.fetchall()
+        data = []
+        for row in datos:
+            dato = {'ID':row[0], 'descripcion':row[1]}
+            data.append(dato)
+        cur.close()
+        conn.close()
+        return jsonify ({'tipo_donante': data, 'mensaje': 'Lista De tipo_Donante'})
+    except Exception as ex:
+        print(ex)
+        return jsonify ({'Mensaje': 'Error'})
+    
 
-@app.route("/", methods=['GET'])
+
+@app.route("/donante", methods=['GET'])
 def donante():
     """
     consulta de donante
@@ -87,9 +113,39 @@ def donante():
         datos= cur.fetchall()
         data = []
         for row in datos:
-            dato = {'id_donante':row[0], 'nombre':row[1], 'telefono':row[2], 'gmail':row[3]}
+            dato = {'id_donante':row[0], 'nombre':row[1], 'telefono':row[2], 'gmail':row[3], 'direccion':row[4], 'estado':row[5], 'tipo_documento':row[6] , 'tipo_documento':row[7]}
+            data.append(dato)
+        cur.close()
+        conn.close()
+        return jsonify ({'donante': data, 'mensaje': 'Lista De Donante'})
+    except Exception as ex:
+        print(ex)
+        return jsonify ({'Mensaje': 'Error'})
     
     
-
+@app.route("/donacion", methods=['GET'])
+def donacion():
+    """
+    consulta de donacion
+    ---
+    responses:
+      200:
+        description: lista de registro
+    """
+    try:
+        conn= conectar('localhost','root','Es1084734914','proyecto')
+        cur= conn.cursor()
+        cur.execute("SELECT * FROM donacion")
+        datos= cur.fetchall()
+        data = []
+        for row in datos:
+            dato = {'id_donante':row[0], 'cantidad_donada':row[1], 'fecha_donacion':row[2], 'forma_donacion':row[3], 'observaciones':row[4]}
+            data.append(dato)
+        cur.close()
+        conn.close()
+        return jsonify ({'donacion': data, 'mensaje': 'Lista De donacion'})
+    except Exception as ex:
+        print(ex)
+        return jsonify ({'Mensaje': 'Error'})
 if __name__ == '__main__':
     app.run(debug=True)
