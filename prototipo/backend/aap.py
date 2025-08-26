@@ -87,7 +87,7 @@ def donante():
         datos= cur.fetchall()
         data = []
         for row in datos:
-            dato = {''}
+            dato = {'id_donante':row[0], 'nombre':row[1], 'telefono':row[2], 'gmail':row[3]}
     
     
 
