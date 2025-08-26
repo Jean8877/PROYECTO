@@ -14,7 +14,32 @@ def conectar(vhost, vuser, vpass, vdb):
     return conn
 
 # ruta consultar tipo_usuario generales
-
+@app.route("/", methods=['GET'])
+def consulta_general():
+    """
+    consulta general del banco de alimento
+    ---
+    responses:
+      200:
+        description: lista de registro
+    """
+    try:
+        conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
+        cur = conn.cursor() # cursor para ejecutar consultas
+        cur.execute("SELECT * FROM usuario") 
+        datos = cur.fetchall()
+        data = []
+        for row in datos:
+            dato = {'id_usuario':row[0], 'nombre_completo':row[1], 'numero_documento':row[2], 'gmail':row[3], 'contrasena':row[4], 'tipo_usuario':row[5], 'tipo_documento':row[6], 'estado':row[7]}
+            data.append(dato) # se agrega a la lista
+        cur.close()
+        conn.close()
+        return jsonify({'usuario': data, 'mesaje': 'Lista De Usuario'})
+    except Exception as ex:
+        print(ex) # imprime el error
+        return jsonify ({'mesaje': 'Error'})
+        
+        
 @app.route("/consultar_tipo_usuario/<int:codigo>", methods=['GET'])
 def consultar_tipo_usuario(codigo):
     """
@@ -30,8 +55,8 @@ def consultar_tipo_usuario(codigo):
         description: Consulta realizada con éxito
     """
     try:
-        conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
-        cur = conn.cursor() # cursor para ejecutar consultas
+        conn = conectar('localhost','root','Es1084734914','proyecto') 
+        cur = conn.cursor()
         cur.execute(f"select * from tipo_usuario where id_tipo_usuario = '{codigo}'") # consulta a la tabla tipo_usuario
         datos = cur.fetchone() # obtiene todos los datos
         cur.close() # cierra el cursor
@@ -44,6 +69,25 @@ def consultar_tipo_usuario(codigo):
     except Exception as ex:
         print(ex)
         return jsonify({'mensaje':'Error en la consulta'}),
+    
+
+@app.route("/", methods=['GET'])
+def donante():
+    """
+    consulta de donante
+    ---
+    responses:
+      200:
+        description: lista de registro
+    """
+    try:
+        conn= conectar('localhost','root','Es1084734914','proyecto')
+        cur= conn.cursor()
+        cur.execute("SELECT * FROM donante")
+        datos= cur.fetchall()
+        data = []
+        for row in datos:
+            dato = {''}
     
     
 
