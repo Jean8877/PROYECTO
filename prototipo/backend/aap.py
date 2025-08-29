@@ -22,6 +22,13 @@ def index():
 # consulta de tipo de usuario
 @app.route("/tipo_usuario", methods=['GET'])
 def tipo_usuario():
+    """
+    consulta de tipo_usuario
+    ---
+    responses:
+      200:
+        description: lista de tipos de usuario
+    """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
         cur = conn.cursor() # cursor para ejecutar consultas
@@ -45,6 +52,18 @@ def tipo_usuario():
 # Ruta para eliminar registro por ID tipo_usuario
 @app.route("/eliminar_tipo_usuario/<int:codigo>", methods=['DELETE'])
 def eliminar_tipo_usuario(codigo):
+    """
+    Eliminar tipo de usuario por ID
+    ---
+    parameters:
+      - name: codigo
+        in: path
+        required: true
+        type: integer
+    responses:
+      200:
+        description: Tipo de usuario eliminado
+    """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
         cur = conn.cursor()
@@ -78,6 +97,7 @@ def registro_tipo_usuario():
 # Ruta para actualizar un tipo_usuario
 @app.route("/actualizar_tipo_usuario/<codigo>", methods=["PUT"])
 def actualizar_tipo_usuario(codigo):
+
     try:
         data = request.get_json()
         descripcion = data['descripcion']
@@ -97,27 +117,11 @@ def actualizar_tipo_usuario(codigo):
 @app.route("/tipo_documento", methods=['GET'])
 def tipo_documento():
     """
-    Consulta general tipo de documento
+    consulta de tipo_documento
     ---
     responses:
       200:
-        description: Lista de tipo_documento
-        schema:
-          type: object
-          properties:
-            tipo_documento:
-              type: array
-              items:
-                type: object
-                properties:
-                  id_tipo_documento:
-                    type: integer
-                  nombre:
-                    type: string
-                  abreviatura:
-                    type: string
-            mensaje:
-              type: string
+        description: lista de tipo de documento
     """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
@@ -142,26 +146,6 @@ def tipo_documento():
 # Ruta para registrar un nuevo tipo_documento
 @app.route("/registro_tipo_documento", methods=['POST'])
 def registro_tipo_documento():
-    """
-    Registrar un nuevo tipo de documento
-    ---
-    parameters:
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            nombre:
-              type: string
-              example: Cedula de Ciudadanía
-            abreviatura:
-              type: string
-              example: CC
-    responses:
-      200:
-        description: Registro agregado
-    """
     try:
         data = request.get_json()
         nombre = data['nombre']
@@ -181,30 +165,6 @@ def registro_tipo_documento():
 # Ruta para actualizar un tipo_documento
 @app.route("/actualizar_tipo_documento/<codigo>", methods=["PUT"])
 def actualizar_tipo_documento(codigo):
-    """
-    Actualizar un tipo de documento por ID
-    ---
-    parameters:
-      - name: codigo
-        in: path
-        required: true
-        type: integer
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            nombre:
-              type: string
-              example: Tarjeta de Identidad
-            abreviatura:
-              type: string
-              example: TI
-    responses:
-      200:
-        description: Registro actualizado
-    """
     try:
         data = request.get_json()
         nombre = data['nombre']
@@ -227,7 +187,7 @@ def actualizar_tipo_documento(codigo):
 @app.route("/eliminar_tipo_documento/<int:codigo>", methods=['DELETE'])
 def eliminar_tipo_documento(codigo):
     """
-    Eliminar registro por ID
+    Eliminar tipo de documento por ID
     ---
     parameters:
       - name: codigo
@@ -236,8 +196,9 @@ def eliminar_tipo_documento(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: tipo de documento eliminado
     """
+
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
         cur = conn.cursor()
@@ -250,17 +211,15 @@ def eliminar_tipo_documento(codigo):
         print(ex)
         return jsonify({'mensaje': 'Error'})
 
-
-
 # ruta tipo_gasto
 @app.route("/tipo_gasto", methods=['GET'])
 def tipo_gasto():
     """
-    consulta general tipo de gasto
+    Consulta de lista de tipos de gasto
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de tipos de gasto
     """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
@@ -323,7 +282,7 @@ def actualizar_tipo_gasto(codigo):
 @app.route("/eliminar_tipo_gasto/<int:codigo>", methods=['DELETE'])
 def eliminar_tipo_gasto(codigo):
     """
-    Eliminar registro por ID
+    Eliminar un tipo de gasto
     ---
     parameters:
       - name: codigo
@@ -332,7 +291,7 @@ def eliminar_tipo_gasto(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: tipo de gasto eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -351,11 +310,11 @@ def eliminar_tipo_gasto(codigo):
 @app.route("/estado", methods=['GET'])
 def estado():
     """
-    consulta general estado
+    Consulta de lista de estados
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de estados
     """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
@@ -417,7 +376,7 @@ def actualizar_estado(codigo):
 @app.route("/eliminar_estado/<int:codigo>", methods=['DELETE'])
 def eliminar_estado(codigo):
     """
-    Eliminar registro por ID
+    Eliminar un estado
     ---
     parameters:
       - name: codigo
@@ -426,7 +385,7 @@ def eliminar_estado(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: Estado eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -445,11 +404,11 @@ def eliminar_estado(codigo):
 @app.route("/gasto", methods=['GET'])
 def gasto():
     """
-    consulta general tipo de gasto
+    Consulta de lista de gastos
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de gastos
     """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
@@ -518,7 +477,7 @@ def actualizar_gasto(codigo):
 @app.route("/eliminar_gasto/<int:codigo>", methods=['DELETE'])
 def eliminar_gasto(codigo):
     """
-    Eliminar registro por ID
+    Eliminar un gasto
     ---
     parameters:
       - name: codigo
@@ -527,7 +486,7 @@ def eliminar_gasto(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: Gasto eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -542,14 +501,14 @@ def eliminar_gasto(codigo):
         return jsonify({'mensaje': 'Error'})
 
 # ruta consultar usuario 
-@app.route("/usuario", methods=['GET'])
-def usuario():
+@app.route("/usuarios", methods=['GET'])
+def usuarios():
     """
-    consulta general del banco de alimento
+    Consulta de lista de usuarios
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de usuarios
     """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
@@ -577,8 +536,9 @@ def usuario():
         return jsonify ({'mesaje': 'Error'})
     
 # Ruta para registrar un nuevo usuario
-@app.route("/registro_usuario", methods=['POST'])
-def registro_usuario():
+@app.route("/registro_usuarios", methods=['POST'])
+def registro_usuarios():
+
     try:
         data = request.get_json()
         nombre_completo = data['nombre_completo']
@@ -599,8 +559,8 @@ def registro_usuario():
         print(ex)
         return jsonify({'mensaje': 'Error'})
 # Ruta para actualizar un usuario
-@app.route("/actualizar_usuario/<codigo>", methods=["PUT"])
-def actualizar_usuario(codigo):
+@app.route("/actualizar_usuarios/<codigo>", methods=["PUT"])
+def actualizar_usuarios(codigo):
     try:
         data = request.get_json()
         nombre_completo = data['nombre_completo']
@@ -623,10 +583,9 @@ def actualizar_usuario(codigo):
         return jsonify({'mensaje': 'Error'})
 
 # Ruta para eliminar usuario
-@app.route("/eliminar_usuario/<int:codigo>", methods=['DELETE'])
-def eliminar_usuario(codigo):
-    """
-    Eliminar registro por ID
+@app.route("/eliminar_usuarios/<int:codigo>", methods=['DELETE'])
+def eliminar_usuarios(codigo):
+    """Eliminar un usuario por su ID
     ---
     parameters:
       - name: codigo
@@ -635,7 +594,7 @@ def eliminar_usuario(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: Usuario eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -653,11 +612,11 @@ def eliminar_usuario(codigo):
 @app.route("/tipo_donante", methods=['GET'])
 def tipo_donante():
     """
-    consulta de tipo_donante
+    Consulta de lista de tipos de donante
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de tipos de donante
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -713,10 +672,10 @@ def actualizar_tipo_donante(codigo):
         return jsonify({'mensaje': 'Error'})
 
 # Ruta para eliminar tipo_donante
-@app.route("/eliminar_usuario/<int:codigo>", methods=['DELETE'])
+@app.route("/eliminar_tipo_donante/<int:codigo>", methods=['DELETE'])
 def eliminar_tipo_donante(codigo):
     """
-    Eliminar registro por ID
+    Eliminar un tipo de donante por su ID
     ---
     parameters:
       - name: codigo
@@ -725,7 +684,7 @@ def eliminar_tipo_donante(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: Tipo de donante eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -744,11 +703,11 @@ def eliminar_tipo_donante(codigo):
 @app.route("/donante", methods=['GET'])
 def donante():
     """
-    consulta de donante
+    Consulta de lista de donantes
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de donantes
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -775,6 +734,7 @@ def donante():
     except Exception as ex:
         print(ex)
         return jsonify ({'Mensaje': 'Error'})
+
 # Ruta para registrar un nuevo donante
 @app.route("/registro_donante", methods=['POST'])
 def registro_donante():
@@ -824,9 +784,9 @@ def actualizar_donante(codigo):
 
 # Ruta para eliminar donante
 @app.route("/eliminar_donante/<int:codigo>", methods=['DELETE'])
-def eliminar_usuario(codigo):
+def eliminar_donante(codigo):
     """
-    Eliminar registro por ID
+    Eliminar donante por ID
     ---
     parameters:
       - name: codigo
@@ -835,7 +795,7 @@ def eliminar_usuario(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: Donante eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -850,16 +810,15 @@ def eliminar_usuario(codigo):
         return jsonify({'mensaje': 'Error'})
 
 
-    
 # ruta de tipo_donacion
 @app.route("/tipo_donacion", methods=['GET'])
 def tipo_donacion():
     """
-    consulta general tipo de donacion
+    Consulta de lista de tipos de donación
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de tipos de donación
     """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
@@ -915,9 +874,9 @@ def actualizar_tipo_donacion(codigo):
 
 # Ruta para eliminar tipo_donacion
 @app.route("/eliminar_tipo_donacion/<int:codigo>", methods=['DELETE'])
-def eliminar_usuario(codigo):
+def eliminar_tipo_donacion(codigo):
     """
-    Eliminar registro por ID
+    Eliminar tipo de donación por ID
     ---
     parameters:
       - name: codigo
@@ -926,7 +885,7 @@ def eliminar_usuario(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: Tipo de donación eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -941,17 +900,14 @@ def eliminar_usuario(codigo):
         return jsonify({'mensaje': 'Error'})
 
 
-
-
-    
 @app.route("/donacion", methods=['GET'])
 def donacion():
     """
-    consulta de donacion
+    Consulta de lista de donaciones
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de donaciones
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1019,7 +975,7 @@ def actualizar_donacion(codigo):
 @app.route("/eliminar_donacion/<int:codigo>", methods=['DELETE'])
 def eliminar_donacion(codigo):
     """
-    Eliminar registro por ID
+    Eliminar donación por ID
     ---
     parameters:
       - name: codigo
@@ -1028,7 +984,7 @@ def eliminar_donacion(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: Donación eliminada
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1041,19 +997,17 @@ def eliminar_donacion(codigo):
     except Exception as ex:
         print(ex)
         return jsonify({'mensaje': 'Error'})
-    
-    
 
 
 # ruta de donacion_has_tipo_donacion
 @app.route("/donacion_has_tipo_donacion", methods=['GET'])
 def donacion_has_tipo_donacion():
     """
-    consulta general donacion_has_tipo_donacion
+    Consulta de lista de donacion_has_tipo_donacion
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de donacion_has_tipo_donacion
     """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
@@ -1115,7 +1069,7 @@ def actualizar_donacion_has_tipo_donacion(codigo):
 @app.route("/eliminar_donacion_has_tipo_donacion/<int:codigo>", methods=['DELETE'])
 def eliminar_donacion_has_tipo_donacion(codigo):
     """
-    Eliminar registro por ID
+    Eliminar donacion_has_tipo_donacion por ID
     ---
     parameters:
       - name: codigo
@@ -1124,7 +1078,7 @@ def eliminar_donacion_has_tipo_donacion(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: donacion_has_tipo_donacion eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1141,13 +1095,6 @@ def eliminar_donacion_has_tipo_donacion(codigo):
 # ruta de certificado_donante
 @app.route("/certificado_donante", methods=['GET'])
 def certificado_donante():
-    """
-    consulta general certificado_donante
-    ---
-    responses:
-      200:
-        description: lista de registro
-    """
     try:
         conn = conectar('localhost','root','Es1084734914','proyecto') # se conecta a la base de datos
         cur = conn.cursor() # cursor para ejecutar consultas
@@ -1224,7 +1171,7 @@ def actualizar_certificado_donante(codigo):
 @app.route("/eliminar_certificado_donante/<int:codigo>", methods=['DELETE'])
 def eliminar_certificado_donante(codigo):
     """
-    Eliminar registro por ID
+    Eliminar certificado_donante por ID
     ---
     parameters:
       - name: codigo
@@ -1233,7 +1180,7 @@ def eliminar_certificado_donante(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: certificado_donante eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1252,11 +1199,11 @@ def eliminar_certificado_donante(codigo):
 @app.route("/categoria_producto", methods=['GET'])
 def categoria_producto():
     """
-    consulta de categoria_producto
+    Consulta de lista de categorias de producto
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de categorias de producto
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1315,7 +1262,7 @@ def actualizar_categoria_producto(codigo):
 @app.route("/eliminar_categoria_producto/<int:codigo>", methods=['DELETE'])
 def eliminar_categoria_producto(codigo):
     """
-    Eliminar registro por ID
+    Eliminar categoria_producto por ID
     ---
     parameters:
       - name: codigo
@@ -1324,7 +1271,7 @@ def eliminar_categoria_producto(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: categoria_producto eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1343,11 +1290,11 @@ def eliminar_categoria_producto(codigo):
 @app.route("/subcategoria_producto", methods=['GET'])
 def subcategoria_producto():
     """
-    consulta de subcategoria_producto
+    Consulta de lista de subcategorias de producto
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de subcategorias de producto
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1409,7 +1356,7 @@ def actualizar_subcategoria_producto(codigo):
 @app.route("/eliminar_subcategoria_producto/<int:codigo>", methods=['DELETE'])
 def eliminar_subcategoria_producto(codigo):
     """
-    Eliminar registro por ID
+    Eliminar subcategoria_producto por ID
     ---
     parameters:
       - name: codigo
@@ -1418,7 +1365,7 @@ def eliminar_subcategoria_producto(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: subcategoria_producto eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1433,16 +1380,15 @@ def eliminar_subcategoria_producto(codigo):
         return jsonify({'mensaje': 'Error'})
 
 
-
 # ruta para fecha_vencimiento
 @app.route("/fecha_vencimiento", methods=['GET'])
 def fecha_vencimiento():
     """
-    consulta de fecha_vencimiento
+    Consulta de lista de fechas de vencimiento
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de fechas de vencimiento
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1501,7 +1447,7 @@ def actualizar_fecha_vencimiento(codigo):
 @app.route("/eliminar_fecha_vencimiento/<int:codigo>", methods=['DELETE'])
 def eliminar_fecha_vencimiento(codigo):
     """
-    Eliminar registro por ID
+    Eliminar fecha_vencimiento por ID
     ---
     parameters:
       - name: codigo
@@ -1510,7 +1456,7 @@ def eliminar_fecha_vencimiento(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: fecha_vencimiento eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1525,17 +1471,15 @@ def eliminar_fecha_vencimiento(codigo):
         return jsonify({'mensaje': 'Error'})
 
 
-
-
 # ruta para acta_vencimiento
 @app.route("/acta_vencimiento", methods=['GET'])
 def acta_vencimiento():
     """
-    consulta de acta_vencimiento
+    Consulta de lista de actas de vencimiento
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de actas de vencimiento
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1597,7 +1541,7 @@ def actualizar_acta_vencimiento(codigo):
 @app.route("/eliminar_acta_vencimiento/<int:codigo>", methods=['DELETE'])
 def eliminar_acta_vencimiento(codigo):
     """
-    Eliminar registro por ID
+    Eliminar acta_vencimiento por ID
     ---
     parameters:
       - name: codigo
@@ -1606,7 +1550,7 @@ def eliminar_acta_vencimiento(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: acta_vencimiento eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1625,11 +1569,11 @@ def eliminar_acta_vencimiento(codigo):
 @app.route("/bodega", methods=['GET'])
 def bodega():
     """
-    consulta de bodega
+    Consulta de lista de bodegas
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de bodegas
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1694,7 +1638,7 @@ def actualizar_bodega(codigo):
 @app.route("/eliminar_bodega/<int:codigo>", methods=['DELETE'])
 def eliminar_bodega(codigo):
     """
-    Eliminar registro por ID
+    Eliminar bodega por ID
     ---
     parameters:
       - name: codigo
@@ -1703,7 +1647,7 @@ def eliminar_bodega(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: bodega eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1722,13 +1666,7 @@ def eliminar_bodega(codigo):
 
 @app.route("/unidad_de_medida", methods=['GET'])
 def unidad_de_medida():
-    """
-    consulta de unidad_de_medida
-    ---
-    responses:
-      200:
-        description: lista de registro
-    """
+    
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
         cur= conn.cursor()
@@ -1748,6 +1686,7 @@ def unidad_de_medida():
     except Exception as ex:
         print(ex)   
         return jsonify ({'Mensaje': 'Error'})
+
 # Ruta para registrar un nueva unidad de medida
 @app.route("/registro_unidad_de_medida", methods=['POST'])
 def registro_unidad_de_medida():
@@ -1790,7 +1729,7 @@ def actualizar_unidad_de_medida(codigo):
 @app.route("/eliminar_unidad_de_medida/<int:codigo>", methods=['DELETE'])
 def eliminar_unidad_de_medida(codigo):
     """
-    Eliminar registro por ID
+    Eliminar unidad_de_medida por ID
     ---
     parameters:
       - name: codigo
@@ -1799,7 +1738,7 @@ def eliminar_unidad_de_medida(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: unidad_de_medida eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1819,11 +1758,11 @@ def eliminar_unidad_de_medida(codigo):
 @app.route("/tipo_organizacion", methods=['GET'])
 def tipo_organizacion():
     """
-    consulta de tipo_organizacion
+    Consulta de lista de tipo_organizacion
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de tipo_organizacion
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1843,6 +1782,7 @@ def tipo_organizacion():
     except Exception as ex:
         print(ex)   
         return jsonify ({'Mensaje': 'Error'})
+
 # Ruta para registrar un nuevo tipo organizacion
 @app.route("/registro_tipo_organizacion", methods=['POST'])
 def registro_tipo_organizacion():
@@ -1882,7 +1822,7 @@ def actualizar_tipo_organizacion(codigo):
 @app.route("/eliminar_tipo_organizacion/<int:codigo>", methods=['DELETE'])
 def eliminar_tipo_organizacion(codigo):
     """
-    Eliminar registro por ID
+    Eliminar tipo_organizacion por ID
     ---
     parameters:
       - name: codigo
@@ -1891,7 +1831,7 @@ def eliminar_tipo_organizacion(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: tipo_organizacion eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -1910,11 +1850,11 @@ def eliminar_tipo_organizacion(codigo):
 @app.route("/tipo_entrega", methods=['GET'])
 def tipo_entrega():
     """
-    consulta de tipo_entrega
+    Consulta de lista de tipo_entrega
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de tipo_entrega
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -1975,7 +1915,7 @@ def actualizar_tipo_entrega(codigo):
 @app.route("/eliminar_tipo_entrega/<int:codigo>", methods=['DELETE'])
 def eliminar_tipo_entrega(codigo):
     """
-    Eliminar registro por ID
+    Eliminar tipo_entrega por ID
     ---
     parameters:
       - name: codigo
@@ -1984,7 +1924,7 @@ def eliminar_tipo_entrega(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: tipo_entrega eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -2004,11 +1944,11 @@ def eliminar_tipo_entrega(codigo):
 @app.route("/organizacion", methods=['GET'])
 def organizacion():
     """
-    consulta de organizacion
+    Consulta de lista de organizacion
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de organizacion
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -2087,7 +2027,7 @@ def actualizar_organizacion(codigo):
 @app.route("/eliminar_organizacion/<int:codigo>", methods=['DELETE'])
 def eliminar_organizacion(codigo):
     """
-    Eliminar registro por ID
+    Eliminar organizacion por ID
     ---
     parameters:
       - name: codigo
@@ -2096,7 +2036,7 @@ def eliminar_organizacion(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: organizacion eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -2115,11 +2055,11 @@ def eliminar_organizacion(codigo):
 @app.route("/movimiento_producto", methods=['GET'])
 def movimiento_producto():
     """
-    consulta de movimiento_producto
+    Consulta de lista de movimiento_producto
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de movimiento_producto
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -2196,7 +2136,7 @@ def actualizar_movimiento_producto(id):
 @app.route("/eliminar_movimiento_producto/<int:codigo>", methods=['DELETE'])
 def eliminar_movimiento_producto(codigo):
     """
-    Eliminar registro por ID
+    Eliminar movimiento_producto por ID
     ---
     parameters:
       - name: codigo
@@ -2205,7 +2145,7 @@ def eliminar_movimiento_producto(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: movimiento_producto eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -2222,13 +2162,7 @@ def eliminar_movimiento_producto(codigo):
 # ruta para producto
 @app.route("/producto", methods=['GET'])
 def producto():
-    """
-    consulta de producto
-    ---
-    responses:
-      200:
-        description: lista de registro
-    """
+    
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
         cur= conn.cursor()
@@ -2259,6 +2193,7 @@ def producto():
     except Exception as ex:
         print(ex)   
         return jsonify ({'Mensaje': 'Error'})
+
 # Ruta para registrar un nuevo producto
 @app.route("/registro_producto", methods=['POST'])
 def registro_producto():
@@ -2322,7 +2257,7 @@ def actualizar_producto(id):
 @app.route("/eliminar_producto/<int:codigo>", methods=['DELETE'])
 def eliminar_producto(codigo):
     """
-    Eliminar registro por ID
+    Eliminar producto por ID
     ---
     parameters:
       - name: codigo
@@ -2331,7 +2266,7 @@ def eliminar_producto(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: producto eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
@@ -2350,11 +2285,11 @@ def eliminar_producto(codigo):
 @app.route("/producto_has_donante", methods=['GET'])
 def producto_has_donante():
     """
-    consulta de producto_has_donante
+    Consulta de lista de producto_has_donante
     ---
     responses:
       200:
-        description: lista de registro
+        description: lista de producto_has_donante
     """
     try:
         conn= conectar('localhost','root','Es1084734914','proyecto')
@@ -2379,6 +2314,7 @@ def producto_has_donante():
     except Exception as ex:
         print(ex)   
         return jsonify ({'Mensaje': 'Error'})
+
 # Ruta para registrar un nuevo producto_has_donante
 @app.route("/registro_producto_has_donante", methods=['POST'])
 def registro_producto_has_donante():
@@ -2400,6 +2336,7 @@ def registro_producto_has_donante():
     except Exception as ex:
         print(ex)
         return jsonify({'mensaje': 'Error'})
+
 # Ruta para actualizar producto_has_donante
 @app.route("/actualizar_producto_has_donante/<id>", methods=["PUT"])
 def actualizar_producto_has_donante(id):
@@ -2428,7 +2365,7 @@ def actualizar_producto_has_donante(id):
 @app.route("/eliminar_producto_has_donante/<int:codigo>", methods=['DELETE'])
 def eliminar_producto_has_donante(codigo):
     """
-    Eliminar registro por ID
+    Eliminar producto_has_donante por ID
     ---
     parameters:
       - name: codigo
@@ -2437,7 +2374,7 @@ def eliminar_producto_has_donante(codigo):
         type: integer
     responses:
       200:
-        description: Registro eliminado
+        description: producto_has_donante eliminado
     """
     try:
         conn = conectar('localhost', 'root', 'Es1084734914', 'proyecto')
